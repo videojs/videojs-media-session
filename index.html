@@ -17,18 +17,18 @@
   </ul>
   <script src="/node_modules/video.js/dist/video.js"></script>
   <script src="/dist/browser/videojs-media-session.js"></script>
+  <script src="/node_modules/videojs-playlist/dist/videojs-playlist.js"></script>
+  <script src="/node_modules/videojs-playlist-ui/dist/videojs-playlist-ui.js"></script>
+  <script src="./playlist.js"></script>
   <script>
     (function(window, videojs) {
       var player = window.player = videojs('videojs-media-session-player');
 
-      player.src({
-        src: '//vjs.zencdn.net/v/oceans.mp4',
-        type: 'video/mp4',
-        title: "Disney's Oceans",
-        artist: 'Disney'
-      });
+      player.playlist(getAwesomePlaylist());
+
 
       player.mediaSession();
+
     }(window, window.videojs));
   </script>
 </body>

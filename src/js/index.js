@@ -10,6 +10,8 @@ const registerPlugin = videojs.registerPlugin || videojs.plugin;
 
 const MEDIA_SESSION_EXISTS = Boolean(navigator.mediaSession);
 
+const SKIP_TIME = 10;
+
 /**
  * Function to invoke when the player is ready.
  *
@@ -29,9 +31,28 @@ const onPlayerReady = (player, options) => {
                       Please try Chrome for Android 57`);
   }
 
+  setUpSkips(player);
+
+  if (player.playlist) {
+    setUpPlaylist(player)
+  }
+
+  player.on('loadstart', () => updateMediaSession(player));
+  updateMediaSession(player);
   player.addClass('vjs-media-session');
 
-  const curSrc = Object.assign({}, player.currentSource());
+};
+
+const updateMediaSession = (player) => {
+  let curSrc;
+
+  if (player.playlist) {
+    const playlist = player.playlist();
+    curSrc = playlist[player.playlist.currentItem()];
+  } else {
+    curSrc = Object.assign({}, player.currentSource());
+  }
+
   const poster = player.poster();
 
   if (!curSrc.artwork && poster) {
@@ -42,6 +63,24 @@ const onPlayerReady = (player, options) => {
   }
 
   navigator.mediaSession.metadata = new MediaMetadata(curSrc);
+};
+
+const setUpSkips = (player) => {
+  navigator.mediaSession.setActionHandler('seekbackward', function() {
+    player.currentTime(player.currentTime() - SKIP_TIME);
+  });
+  navigator.mediaSession.setActionHandler('seekforward', function() {
+    player.currentTime(player.currentTime() + SKIP_TIME);
+  });
+};
+
+const setUpPlaylist = (player) => {
+  navigator.mediaSession.setActionHandler('previoustrack', function() {
+    player.playlist.previous();
+  });
+  navigator.mediaSession.setActionHandler('nexttrack', function() {
+    player.playlist.next();
+  });
 };
 
 /**

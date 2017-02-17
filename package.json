@@ -46,6 +46,8 @@
     "video.js": "^5.16.0"
   },
   "devDependencies": {
+    "videojs-playlist": "^3.0.2",
+    "videojs-playlist-ui": "^2.3.2",
     "videojs-spellbook": "^2.0.2"
   }
 }
