@@ -2,6 +2,8 @@
 
 Media Sessions API
 
+This is an experimental videojs plugin that interfaces videojs, [videojs-playlist][], and Chrome's newly announced [Media Session API] [implementation][].
+
 ## Table of Contents
 
 <!-- START doctoc -->
@@ -65,3 +67,6 @@ MIT. Copyright (c) Gary Katsevman &lt;git@gkatsev.com&gt;
 
 
 [videojs]: http://videojs.com/
+[videojs-playlist]: https://github.com/brightcove/videojs-playlist
+[Media Session API]: https://wicg.github.io/mediasession/
+[implementation]: https://developers.google.com/web/updates/2017/02/media-session
