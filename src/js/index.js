@@ -72,6 +72,7 @@ const updateMediaSession = (player) => {
     }
   }
 
+  curSrc.src = player.currentSrc();
   navigator.mediaSession.metadata = new MediaMetadata(curSrc);
 };
 
