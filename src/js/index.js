@@ -29,6 +29,7 @@ const onPlayerReady = (player, options) => {
   if (!MEDIA_SESSION_EXISTS) {
     videojs.log.warn(`Media Session is not available on this device.
                       Please try Chrome for Android 57`);
+    return;
   }
 
   setUpSkips(player);
@@ -48,10 +49,12 @@ const updateMediaSession = (player) => {
 
   if (player.playlist) {
     const playlist = player.playlist();
-    curSrc = playlist[player.playlist.currentItem()];
+    curSrc = Object.assign({}, playlist[player.playlist.currentItem()]);
   } else {
     curSrc = Object.assign({}, player.currentSource());
   }
+
+  curSrc.title = curSrc.name;
 
   const poster = player.poster();
 

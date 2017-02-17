@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <title>videojs-media-session Demo</title>
   <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
+  <link href="/node_modules/videojs-playlist-ui/dist/videojs-playlist-ui.vertical.css" rel="stylesheet">
 </head>
 <body>
   <video id="videojs-media-session-player" class="video-js vjs-default-skin" controls
          poster="//vjs.zencdn.net/v/oceans.png"
     >
   </video>
+  <div class="vjs-playlist"></div>
   <ul>
     <li><a href="/test/">Run unit tests in browser.</a></li>
     <li><a href="/dist/docs/api/">Read generated api docs.</a></li>
@@ -25,7 +27,7 @@
       var player = window.player = videojs('videojs-media-session-player');
 
       player.playlist(getAwesomePlaylist());
-
+      player.playlistUi();
 
       player.mediaSession();
 
