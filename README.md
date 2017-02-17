@@ -1,5 +1,7 @@
 # videojs-media-session
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/videojs/videojs-media-session.svg)](https://greenkeeper.io/)
+
 Media Sessions API
 
 This is an experimental videojs plugin that interfaces videojs, [videojs-playlist][], and Chrome's newly announced [Media Session API] [implementation][].
