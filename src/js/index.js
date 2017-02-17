@@ -1,4 +1,5 @@
 import videojs from 'video.js';
+import path from 'path';
 
 // Default options for the plugin.
 const defaults = {};
@@ -24,12 +25,21 @@ const MEDIA_SESSION_EXISTS = Boolean(navigator.mediaSession);
  */
 const onPlayerReady = (player, options) => {
   if (!MEDIA_SESSION_EXISTS) {
-    videojs.log.warn('Media Session is not available on this device. Please try Chrome for Android 57');
+    videojs.log.warn(`Media Session is not available on this device.
+                      Please try Chrome for Android 57`);
   }
 
   player.addClass('vjs-media-session');
 
-  const curSrc = player.currentSource();
+  const curSrc = Object.assign({}, player.currentSource());
+  const poster = player.poster();
+
+  if (!curSrc.artwork && poster) {
+    curSrc.artwork = [{
+      src: poster,
+      type: 'image/' + path.extname(poster).slice(1)
+    }];
+  }
 
   navigator.mediaSession.metadata = new MediaMetadata(curSrc);
 };
