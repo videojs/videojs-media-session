@@ -5,11 +5,36 @@
   <title>videojs-media-session Demo</title>
   <link href="./node_modules/video.js/dist/video-js.css" rel="stylesheet">
   <link href="./node_modules/videojs-playlist-ui/dist/videojs-playlist-ui.vertical.css" rel="stylesheet">
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <style>
+    .github {
+      height: 2em;
+      margin-bottom: 0.5em;
+    }
+  </style>
 </head>
 <body>
-  <video id="videojs-media-session-player" class="video-js vjs-default-skin" controls
-         poster="//vjs.zencdn.net/v/oceans.png"
-    >
+  <h1>
+    <a href="https://github.com/videojs/videojs-media-session">videojs-media-session</a> Demo
+  </h1>
+  <p>
+  This is an experimental videojs plugin that interfaces <a href="http://videojs.com">videojs</a>,
+  <a href="https://github.com/brightcove/videojs-playlist">videojs-playlist</a>, and Chrome's newly announced
+  <a href="https://wicg.github.io/mediasession/">Media Session API</a> <a href="https://developers.google.com/web/updates/2017/02/media-session">implementation<a>.
+  </p>
+  <p>
+  To use, you must be on Chrome for Android 57 Beta. After playing, look at the newly created persistent notification
+  </p>
+  <div class="github">
+    <!-- Place this tag where you want the button to render. -->
+    <a class="github-button" href="https://github.com/videojs/videojs-media-session" data-icon="octicon-star" data-style="mega" data-count-href="/videojs/videojs-media-session/stargazers" data-count-api="/repos/videojs/videojs-media-session#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star videojs/videojs-media-session on GitHub">Star</a>
+    <!-- Place this tag where you want the button to render. -->
+    <a class="github-button" href="https://github.com/videojs/videojs-media-session/fork" data-icon="octicon-repo-forked" data-style="mega" data-count-href="/videojs/videojs-media-session/network" data-count-api="/repos/videojs/videojs-media-session#forks_count" data-count-aria-label="# forks on GitHub" aria-label="Fork videojs/videojs-media-session on GitHub">Fork</a>
+  </div>
+  <video id="videojs-media-session-player" class="video-js vjs-default-skin"
+   width=720 height=420 controls>
   </video>
   <div class="vjs-playlist"></div>
   <script src="//vjs.zencdn.net/5.16/video.js"></script>
