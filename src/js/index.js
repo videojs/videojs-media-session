@@ -56,13 +56,20 @@ const updateMediaSession = (player) => {
 
   curSrc.title = curSrc.name;
 
-  const poster = player.poster();
+  if (!curSrc.artwork) {
+    const poster = player.poster();
 
-  if (!curSrc.artwork && poster) {
-    curSrc.artwork = [{
-      src: poster,
-      type: 'image/' + path.extname(poster).slice(1)
-    }];
+    if (curSrc.thumbnail) {
+      curSrc.artwork = curSrc.thumbnail.map((thumb) => ({
+        src: thumb.srcset || thumb.src,
+        type: thumb.type || path.extname(thumb.src).slice(1)
+      }));
+    } else if (poster) {
+      curSrc.artwork = [{
+        src: poster,
+        type: 'image/' + path.extname(poster).slice(1)
+      }];
+    }
   }
 
   navigator.mediaSession.metadata = new MediaMetadata(curSrc);
