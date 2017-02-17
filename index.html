@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-media-session Demo</title>
+  <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
+</head>
+<body>
+  <video id="videojs-media-session-player" class="video-js vjs-default-skin" controls>
+  </video>
+  <ul>
+    <li><a href="/test/">Run unit tests in browser.</a></li>
+    <li><a href="/dist/docs/api/">Read generated api docs.</a></li>
+    <li><a href="/dist/docs/manual/">Read generated manual docs.</a></li>
+  </ul>
+  <script src="/node_modules/video.js/dist/video.js"></script>
+  <script src="/dist/browser/videojs-media-session.js"></script>
+  <script>
+    (function(window, videojs) {
+      var player = window.player = videojs('videojs-media-session-player');
+
+      player.src({
+        src: '//vjs.zencdn.net/v/oceans.mp4',
+        type: 'video/mp4',
+        title: "Disney's Oceans",
+        artist: 'Disney',
+        artwork: [{
+          src: '//vjs.zencdn.net/v/oceans.png',
+          type: 'image/png',
+          sizes: '512x512'
+        }]
+      });
+
+      player.mediaSession();
+    }(window, window.videojs));
+  </script>
+</body>
+</html>
