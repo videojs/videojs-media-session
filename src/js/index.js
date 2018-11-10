@@ -1,16 +1,18 @@
 import videojs from 'video.js';
 import path from 'path';
 
+const MEDIA_SESSION_EXISTS = Boolean(navigator.mediaSession);
+
+const DEFAULT_SKIP_TIME = 10;
+
 // Default options for the plugin.
-const defaults = {};
+const defaults = {
+  skipTime: DEFAULT_SKIP_TIME
+};
 
 // Cross-compatibility for Video.js 5 and 6.
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
 // const dom = videojs.dom || videojs;
-
-const MEDIA_SESSION_EXISTS = Boolean(navigator.mediaSession);
-
-const SKIP_TIME = 10;
 
 /**
  * Function to invoke when the player is ready.
@@ -32,19 +34,19 @@ const onPlayerReady = (player, options) => {
     return;
   }
 
-  setUpSkips(player);
+  setUpSkips(player, options.skipTime);
 
   if (player.playlist) {
     setUpPlaylist(player)
   }
 
-  player.on('loadstart', () => updateMediaSession(player));
-  updateMediaSession(player);
+  player.on('loadstart', () => updateMediaSession(player, options));
+  updateMediaSession(player, options);
   player.addClass('vjs-media-session');
 
 };
 
-const updateMediaSession = (player) => {
+const updateMediaSession = (player, options) => {
   let curSrc;
 
   if (player.playlist) {
@@ -54,9 +56,25 @@ const updateMediaSession = (player) => {
     curSrc = Object.assign({}, player.currentSource());
   }
 
-  curSrc.title = curSrc.name;
-
-  if (!curSrc.artwork) {
+  if (options.title) {
+    curSrc.title = options.title;
+  } else {
+    if (!curSrc.title) {
+      curSrc.title = curSrc.name;
+    }
+  }
+  
+  if (options.artist) {
+    curSrc.artist = options.artist;
+  }
+  
+  if (options.album) {
+    curSrc.album = options.album;
+  }
+  
+  if (options.artwork) {
+    curSrc.artwork = options.artwork;
+  } else if (!curSrc.artwork) {
     const poster = player.poster();
 
     if (curSrc.thumbnail) {
@@ -76,12 +94,12 @@ const updateMediaSession = (player) => {
   navigator.mediaSession.metadata = new MediaMetadata(curSrc);
 };
 
-const setUpSkips = (player) => {
+const setUpSkips = (player, skipTime) => {
   navigator.mediaSession.setActionHandler('seekbackward', function() {
-    player.currentTime(player.currentTime() - SKIP_TIME);
+    player.currentTime(player.currentTime() - skipTime);
   });
   navigator.mediaSession.setActionHandler('seekforward', function() {
-    player.currentTime(player.currentTime() + SKIP_TIME);
+    player.currentTime(player.currentTime() + skipTime);
   });
 };
 
