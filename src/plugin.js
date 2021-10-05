@@ -1,5 +1,7 @@
 import videojs from 'video.js';
-import path from 'path';
+import window from 'global/window';
+
+/* global path */
 
 // Default options for the plugin.
 const defaults = {};
@@ -8,47 +10,18 @@ const defaults = {};
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
 // const dom = videojs.dom || videojs;
 
+const navigator = window.navigator;
+
 const MEDIA_SESSION_EXISTS = Boolean(navigator.mediaSession);
 
 const SKIP_TIME = 10;
-
-/**
- * Function to invoke when the player is ready.
- *
- * This is a great place for your plugin to initialize itself. When this
- * function is called, the player will have its DOM and child components
- * in place.
- *
- * @function onPlayerReady
- * @param    {Player} player
- *           A Video.js player.
- * @param    {Object} [options={}]
- *           An object of options left to the plugin author to define.
- */
-const onPlayerReady = (player, options) => {
-  if (!MEDIA_SESSION_EXISTS) {
-    videojs.log.warn(`Media Session is not available on this device.
-                      Please try Chrome for Android 57`);
-    return;
-  }
-
-  setUpSkips(player);
-
-  if (player.playlist) {
-    setUpPlaylist(player)
-  }
-
-  player.on('loadstart', () => updateMediaSession(player));
-  updateMediaSession(player);
-  player.addClass('vjs-media-session');
-
-};
 
 const updateMediaSession = (player) => {
   let curSrc;
 
   if (player.playlist) {
     const playlist = player.playlist();
+
     curSrc = Object.assign({}, playlist[player.playlist.currentItem()]);
   } else {
     curSrc = Object.assign({}, player.currentSource());
@@ -73,7 +46,7 @@ const updateMediaSession = (player) => {
   }
 
   curSrc.src = player.currentSrc();
-  navigator.mediaSession.metadata = new MediaMetadata(curSrc);
+  navigator.mediaSession.metadata = new window.MediaMetadata(curSrc);
 };
 
 const setUpSkips = (player) => {
@@ -92,6 +65,38 @@ const setUpPlaylist = (player) => {
   navigator.mediaSession.setActionHandler('nexttrack', function() {
     player.playlist.next();
   });
+};
+
+/**
+ * Function to invoke when the player is ready.
+ *
+ * This is a great place for your plugin to initialize itself. When this
+ * function is called, the player will have its DOM and child components
+ * in place.
+ *
+ * @function onPlayerReady
+ * @param    {Player} player
+ *           A Video.js player.
+ * @param    {Object} [options={}]
+ *           An object of options left to the plugin author to define.
+ */
+const onPlayerReady = (player, options) => {
+  if (!MEDIA_SESSION_EXISTS) {
+    videojs.log.warn(`Media Session is not available on this device.
+                      Please try Chrome for Android 57`);
+    return;
+  }
+
+  setUpSkips(player);
+
+  if (player.playlist) {
+    setUpPlaylist(player);
+  }
+
+  player.on('loadstart', () => updateMediaSession(player));
+  updateMediaSession(player);
+  player.addClass('vjs-media-session');
+
 };
 
 /**
