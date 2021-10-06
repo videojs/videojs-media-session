@@ -1,8 +1,6 @@
 import videojs from 'video.js';
 import window from 'global/window';
 
-/* global path */
-
 // Default options for the plugin.
 const defaults = {};
 
@@ -15,6 +13,15 @@ const navigator = window.navigator;
 const MEDIA_SESSION_EXISTS = Boolean(navigator.mediaSession);
 
 const SKIP_TIME = 10;
+
+const getType = (url) => {
+  const ext = url.split(/[#?]/)[0].split('.').pop().trim().toLowerCase();
+
+  if (ext === 'jpg') {
+    return 'image/jpeg';
+  }
+  return `image/${ext}`;
+};
 
 const updateMediaSession = (player) => {
   let curSrc;
@@ -35,12 +42,12 @@ const updateMediaSession = (player) => {
     if (curSrc.thumbnail) {
       curSrc.artwork = curSrc.thumbnail.map((thumb) => ({
         src: thumb.srcset || thumb.src,
-        type: thumb.type || path.extname(thumb.src).slice(1)
+        type: thumb.type || getType(thumb.src)
       }));
     } else if (poster) {
       curSrc.artwork = [{
         src: poster,
-        type: 'image/' + path.extname(poster).slice(1)
+        type: getType(poster)
       }];
     }
   }
