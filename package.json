@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Media Session API implementation for Video.js",
   "main": "dist/videojs-media-session.cjs.js",
+  "repository": "github:videojs/videojs-media-session",
   "scripts": {
     "build": "npm-run-all -s clean -p build:*",
     "build-prod": "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
