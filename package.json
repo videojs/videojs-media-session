@@ -1,17 +1,31 @@
 {
   "name": "videojs-media-session",
   "version": "1.0.0",
-  "description": "Media Sessions API",
-  "main": "dist/es5/index.js",
+  "description": "Media Session API implementation for Video.js",
+  "main": "dist/videojs-media-session.cjs.js",
+  "repository": "github:videojs/videojs-media-session",
   "scripts": {
-    "build": "sb-build",
-    "clean": "sb-clean",
-    "lint": "sb-lint",
-    "start": "sb-start",
-    "test": "sb-test",
-    "watch": "sb-watch",
+    "build": "npm-run-all -s clean -p build:*",
+    "build-prod": "cross-env-shell NO_TEST_BUNDLE=1 'npm run build'",
+    "build-test": "cross-env-shell TEST_BUNDLE_ONLY=1 'npm run build'",
+    "build:js": "rollup -c scripts/rollup.config.js",
+    "clean": "shx rm -rf ./dist ./test/dist ./cjs ./es && shx mkdir -p ./dist ./test/dist ./cjs ./es",
+    "docs": "npm-run-all docs:*",
+    "docs:api": "jsdoc src -r -d docs/api",
+    "docs:toc": "doctoc --notitle README.md",
+    "lint": "vjsstandard",
+    "server": "karma start scripts/karma.conf.js --singleRun=false --auto-watch",
+    "start": "npm-run-all -p server watch",
+    "test": "npm-run-all lint build-test && karma start scripts/karma.conf.js",
+    "posttest": "shx cat test/dist/coverage/text.txt",
+    "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
+    "preversion": "npm test",
+    "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
+    "postversion": "sb-release",
+    "watch": "npm-run-all -p watch:*",
+    "watch:js": "npm run build:js -- -w",
     "prepublish": "npm run build",
-    "postversion": "sb-release"
+    "prepublishOnly": "npm-run-all build-prod && vjsverify --verbose"
   },
   "keywords": [
     "videojs",
@@ -21,33 +35,60 @@
   "license": "MIT",
   "jsnext:main": "src/js/index.js",
   "engines": {
-    "node": ">=4.4.0"
+    "node": ">=14",
+    "npm": ">=6"
   },
   "generator-videojs-plugin": {
-    "version": "3.1.0"
-  },
-  "browserify-shim": "node_modules/videojs-spellbook/config/shim.config.js",
-  "spellbook": {
-    "css": false
+    "version": "8.0.0"
   },
   "files": [
-    "CHANGELOG.md",
     "CONTRIBUTING.md",
-    "README.md",
-    "dist/browser",
-    "dist/docs",
-    "dist/es5",
-    "dist/lang",
+    "cjs/",
+    "dist/",
     "docs/",
+    "es/",
     "index.html",
-    "src/"
+    "scripts/",
+    "src/",
+    "test/"
   ],
+  "module": "dist/videojs-media-session.es.js",
+  "browser": "dist/videojs-media-session.js",
+  "vjsstandard": {
+    "ignore": [
+      "es",
+      "cjs",
+      "dist",
+      "docs",
+      "test/dist"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
+  },
+  "lint-staged": {
+    "*.js": "vjsstandard --fix",
+    "README.md": "doctoc --notitle"
+  },
   "dependencies": {
-    "video.js": "^5.16.0"
+    "global": "^4.4.0",
+    "video.js": "^6 || ^7"
   },
   "devDependencies": {
-    "videojs-playlist": "^3.0.2",
-    "videojs-playlist-ui": "^2.3.2",
-    "videojs-spellbook": "^2.0.2"
+    "@babel/runtime": "^7.14.0",
+    "@videojs/generator-helpers": "~2.0.2",
+    "jsdoc": "~3.6.6",
+    "karma": "^6.3.2",
+    "rollup": "^2.46.0",
+    "sinon": "^9.1.0",
+    "videojs-generate-karma-config": "~8.0.0",
+    "videojs-generate-rollup-config": "~6.2.0",
+    "videojs-generator-verify": "~3.0.3",
+    "videojs-playlist": "^4.3.1",
+    "videojs-playlist-ui": "^3.8.0",
+    "videojs-standard": "^8.0.4"
   }
 }
